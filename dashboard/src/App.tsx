@@ -1,5 +1,4 @@
-import { Authenticated, GitHubBanner, Refine, WelcomePage } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
+import { Authenticated, Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import { useNotificationProvider } from "@refinedev/antd";
@@ -12,16 +11,19 @@ import routerBindings, {
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import dataProvider from './providers/data-provider'
-import ShowTournaments from "./content/tournaments/ShowTournaments";
-import Home from "./content/Home";
-import AppLayout from "./components/AppLayout/AppLayout";
-import CreateTournament from "./content/tournaments/create/CreateT";
-import EditTournament from "./content/tournaments/edit/EditT";
-import { resources } from "./config/resources";
-import ShowTeams from "./content/teams/ShowTeams";
-import Login from "./content/login/Login";
-import { authProvider } from "./providers/auth-provider";
+import dataProvider from './dashboardApp/providers/data-provider'
+import ShowTournaments from "./dashboardApp/content/tournaments/ShowTournaments";
+import Home from "./dashboardApp/content/Home";
+import CreateTournament from "./dashboardApp/content/tournaments/create/CreateT";
+import EditTournament from "./dashboardApp/content/tournaments/edit/EditT";
+import { resources } from "./dashboardApp/config/resources";
+import AppLayout from "./dashboardApp/components/AppLayout/AppLayout";
+import ShowTeams from "./dashboardApp/content/teams/ShowTeams";
+import Login from "./dashboardApp/content/login/Login";
+import { authProvider } from "./dashboardApp/providers/auth-provider";
+import LandingApp from "./landingPage/LandingApp"
+import SignUpScreen from "./landingPage/landingTournaments/SignUpScreen";
+import ShowTLanding from "./landingPage/landingTournaments/ShowTLanding";
 
 function App() {
   return (
@@ -43,7 +45,9 @@ function App() {
           >
             <Authenticated key="protected" fallback={<Login></Login>}>
               <Routes>
-                <Route index element={<WelcomePage />} />
+                <Route index element={<LandingApp />} />
+                <Route path="/t" element={<ShowTLanding />} />
+                <Route path="/t/:id" element={<SignUpScreen />} />
                 <Route element={<AppLayout />}>
                   <Route path="/tournaments" >
                     <Route index element={<ShowTournaments />} />
