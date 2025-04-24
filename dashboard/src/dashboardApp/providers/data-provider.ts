@@ -105,13 +105,22 @@ const dataProvider: DataProvider = {
                 const teamsMap = participantSnap.data().teams
 
                 if (teamsMap) {
-                    const teams = Object.keys(teamsMap).map((teamKey) => ({
-                        id: teamKey,
-                        ...teamsMap[teamKey]
-                    }));
+                    const teams = Object.keys(teamsMap).map((teamKey) => {
+                        const team = teamsMap[teamKey];
+                        return {
+                            id: teamKey,
+                            name: team.name,
+                            players: [
+                                team.player1,
+                                team.player2,
+                                team.player3,
+                                team.player4,
+                            ],
+                        };
+                    });
 
                     (data as any).teams = teams
-                    console.log(teams)
+                    console.log('EventCounts', teams)
                 }
             } else {
                 console.log('Nema timova.');

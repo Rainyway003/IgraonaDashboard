@@ -18,7 +18,7 @@ function LandingScreen() {
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate('/tt4')
+    navigate('/t')
   }
 
   return (

@@ -24,6 +24,7 @@ import { authProvider } from "./dashboardApp/providers/auth-provider";
 import LandingApp from "./landingPage/LandingApp"
 import SignUpScreen from "./landingPage/landingTournaments/SignUpScreen";
 import ShowTLanding from "./landingPage/landingTournaments/ShowTLanding";
+import ShowPlayers from "./dashboardApp/content/players/ShowPlayers";
 
 function App() {
   return (
@@ -56,6 +57,9 @@ function App() {
                   </Route>
                   <Route path="/tournaments/:id" >
                     <Route index element={<ShowTeams />} />
+                  </Route>
+                  <Route path="/tournaments/:id/:name" >
+                    <Route index element={<ShowPlayers />} />
                   </Route>
                   <Route path="/dashboard" element={<Home />} />
                 </Route>

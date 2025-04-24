@@ -1,17 +1,21 @@
 import React, { PropsWithChildren } from 'react';
-import { Layout, theme, Table, Avatar, Space } from 'antd';
+import { Layout, theme, Table, Avatar, Space, Button } from 'antd';
 import { AntDesignOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
 import { useOne } from "@refinedev/core"
-import { DeleteButton, EditButton } from '@refinedev/antd';
-import { useNavigate, useParams } from 'react-router';
+import { DeleteButton } from '@refinedev/antd';
+import { useParams } from 'react-router';
 
-const ShowTeams: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../providers/firebase';
+
+import BanPlayer from './BanPlayer';
+
+const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const { id } = useParams();
-
-    const navigate = useNavigate()
+    const { name } = useParams()
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -22,6 +26,8 @@ const ShowTeams: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         id: id
     })
 
+    console.log('evo', data?.data.teams)
+
     const columns = [
         {
             title: 'Avatar',
@@ -30,28 +36,30 @@ const ShowTeams: React.FC<PropsWithChildren<{}>> = ({ children }) => {
             render: () => <Avatar icon={<AntDesignOutlined />} />,
         },
         {
-            title: 'Naziv tima',
+            title: 'Ime igrača',
             dataIndex: 'name',
             key: 'name',
-        },
-        {
-            title: 'Naziv tima',
-            dataIndex: 'player1',
-            key: 'name',
+            render: (name: string) => <span>{name}</span>,
         },
         {
             title: 'Akcije',
             key: 'actions',
             render: (_: any, record: any) => (
                 <Space>
-                    <EditButton hideText size="small" resource="tournaments" recordItemId={record.id} />
                     <DeleteButton hideText size="small" resource="tournaments" recordItemId={record.id} />
+                    <BanPlayer player={record}></BanPlayer>
                 </Space>
             ),
         },
     ];
 
-    console.log(data?.data.teams);
+    const players = data?.data?.teams
+        ?.find((team: any) => team.name === name)
+        ?.players?.map((player: any) => ({
+            key: `${name}-${player}`,
+            name: player,
+            teamName: name,
+        })) || [];
 
     return (
         <Layout className="h-screen" style={{ display: 'flex', flexDirection: 'row' }}>
@@ -68,7 +76,7 @@ const ShowTeams: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
                     <Table
                         loading={isLoading}
-                        dataSource={data?.data.teams}
+                        dataSource={players}
                         columns={columns}
                         rowKey="id"
                         pagination={{
@@ -78,12 +86,17 @@ const ShowTeams: React.FC<PropsWithChildren<{}>> = ({ children }) => {
                         onRow={(record) => ({
                             onClick: (event) => {
                                 const target = event.target as HTMLElement;
-                                if (target.closest('button')) return;
-                                navigate(`/tournaments/${id}/${record.name}`);
+                                if (
+                                    target.closest('button') ||
+                                    target.closest('input') ||
+                                    target.closest('.ant-modal')
+                                ) {
+                                    return;
+                                }
+                                window.location.replace(`${record.name}`)
                             },
                         })}
                     />
-
                     {children}
                 </Content>
             </Layout>
@@ -91,4 +104,4 @@ const ShowTeams: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     );
 };
 
-export default ShowTeams;
+export default ShowPlayers;

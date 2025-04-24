@@ -9,6 +9,8 @@ import FormInput from '../components/forms/FormInput';
 import { signUpTeam } from '../firebase/firebaseDatabase';
 import { Form } from 'antd';
 import { useOne, useUpdate } from '@refinedev/core';
+import { db } from '../../dashboardApp/providers/firebase';
+import { collection, doc, getDocs } from 'firebase/firestore';
 
 function SignUpScreen() {
   const { id } = useParams()
@@ -21,14 +23,28 @@ function SignUpScreen() {
 
   const tournament = data?.data
 
-  const onFinish = (values) => {
-    mutate({
-      resource: "participants",
-      id: tournament?.id,
-      values: {
-        ...values,
-      }
-    })
+  const onFinish = async (values) => {
+    const players = Object.keys(values).filter(key => key.startsWith('player')).map(key => values[key]);
+
+    const bannedRef = collection(db, 'banned')
+    const bannedSnap = await getDocs(bannedRef)
+
+    const bannedPlayers = bannedSnap.docs.filter(doc =>
+      players.includes(doc.data().faceit)
+    )
+
+    if (bannedPlayers.length < 0) {
+      mutate({
+        resource: "participants",
+        id: tournament?.id,
+        values: {
+          ...values,
+        }
+      })
+    } else {
+      console.log("BANAN SI")
+    }
+
   }
 
   const [rules, setRules] = useState(false);
@@ -37,7 +53,7 @@ function SignUpScreen() {
 
   return (
     <>
-      <div className="w-screen h-svh bg-red-200 overflow-hidden">
+      <div className="w-screen h-svh bg-red-200 ">
         <div className="igraona h-full md:h-[110vh] w-full bg-[#161616] relative bg-cover bg-no-repeat flex justify-center items-center" style={{
           backgroundImage: `url(${Pozadina})`,
           backgroundPosition: "calc(50%) center",

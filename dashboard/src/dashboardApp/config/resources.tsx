@@ -15,4 +15,8 @@ export const resources: IResourceItem[] = [
         name: 'teams',
         list: '/tournaments/:id',
     },
+    {
+        name: 'players',
+        list: '/tournaments/:id/:name',
+    },
 ]
