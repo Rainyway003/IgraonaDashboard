@@ -9,7 +9,6 @@ const BanPlayer = ({ player }: { player: any }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('')
     const [reason, setReason] = useState('')
-    const [isBanned, setIsBanned] = useState('')
 
 
 

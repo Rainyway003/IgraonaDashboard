@@ -33,7 +33,9 @@ function SignUpScreen() {
       players.includes(doc.data().faceit)
     )
 
-    if (bannedPlayers.length < 0) {
+    console.log(bannedPlayers)
+
+    if (bannedPlayers.length === 0) {
       mutate({
         resource: "participants",
         id: tournament?.id,
