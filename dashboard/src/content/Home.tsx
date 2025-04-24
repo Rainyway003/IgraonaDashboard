@@ -11,7 +11,6 @@ const Home: React.FC = () => {
 
     return (
         <Layout className="h-screen" style={{ display: 'flex', flexDirection: 'row' }}>
-            <Sidebar />
             <Layout style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
                 <Content
                     style={{

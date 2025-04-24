@@ -1,9 +1,10 @@
-import { DataProvider } from "@refinedev/core";
-import { collection, getDocs } from "firebase/firestore";
+import { BaseRecord, CreateParams, CreateResponse, DataProvider, DeleteOneParams, DeleteOneResponse, GetOneParams, GetOneResponse, UpdateParams } from "@refinedev/core";
+import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, updateDoc, WithFieldValue } from "firebase/firestore";
 import { db } from "./firebase";
 
 const dataProvider: DataProvider = {
-    getList: async ({ resource }): Promise<{ data: any, total: number }> => {
+    getList: async ({ resource }): Promise<({ data: any, total: number })> => {
+
         const turnirDoc = collection(db, resource)
         const turnirSnap = await getDocs(turnirDoc)
 
@@ -19,10 +20,86 @@ const dataProvider: DataProvider = {
             total: length
         }
     },
-    create: ({ resource, variables, meta }) => { throw new Error("Nema jos"); },
-    update: ({ resource, id, variables, meta }) => { throw new Error("Nema jos"); },
-    deleteOne: ({ resource, id, variables, meta }) => { throw new Error("Nema jos"); },
-    getOne: ({ resource, id, meta }) => { throw new Error("Nema jos"); },
+    create: async <TData = any, TVariables = DocumentData>(
+        { resource, variables }: CreateParams<TVariables>
+    ): Promise<CreateResponse<TData>> => {
+        const docRef = await addDoc(
+            collection(db, resource),
+            variables as WithFieldValue<DocumentData>
+        );
+
+        return {
+            data: {
+                id: docRef.id,
+                ...variables,
+            } as TData,
+        };
+    },
+    update: async <TData = any, TVariables = DocumentData>(
+        { resource, id, variables }: UpdateParams<TVariables>
+    ): Promise<CreateResponse<TData>> => {
+        const docRef = doc(db, resource, String(id));
+
+        await updateDoc(docRef, {
+            ...variables
+        })
+
+        return {
+            data: {
+                id: id,
+                ...variables,
+            } as TData
+        }
+    },
+    deleteOne: async <TData = any, TVariables = {}>(
+        { resource, id }: DeleteOneParams<TVariables>
+    ): Promise<DeleteOneResponse<TData>> => {
+        const docRef = doc(db, resource, id as string);
+        await deleteDoc(docRef);
+
+        return {
+            data: { id } as TData,
+        };
+    },
+    getOne: async <TData extends BaseRecord = BaseRecord>(
+        { resource, id }: GetOneParams
+    ): Promise<GetOneResponse<TData>> => {
+        const docRef = doc(db, resource, String(id));
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            throw new Error(`Document with id ${id} not found`);
+        }
+
+        const data = {
+            id: docSnap.id,
+            ...(docSnap.data() as TData),
+        };
+
+        if (resource === "tournaments") {
+            const teamsMap = docSnap.data().teams;
+
+            // Jakove jebem ti sunac ja sam mislio da nije map mucio sam se sat vremena zbog tebe.
+
+            if (teamsMap) {
+                const teams = Object.keys(teamsMap).map((teamKey) => {
+                    return {
+                        id: teamKey,
+                        ...teamsMap[teamKey],
+                    };
+                });
+
+                (data as any).teams = teams;
+                console.log('Fetched teams:', teams);
+            } else {
+                console.log('No teams found.');
+                (data as any).teams = [];
+            }
+        }
+
+
+        return { data: { ...data } };
+    },
     getApiUrl: () => "",
 }
 

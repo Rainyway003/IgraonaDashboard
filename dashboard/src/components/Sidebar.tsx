@@ -9,6 +9,8 @@ import {
 import { Layout, Menu, Button } from 'antd';
 import { useLocation, useNavigate } from 'react-router';
 
+import LogOut from './LogOut';
+
 const { Sider } = Layout;
 
 const Sidebar = () => {
@@ -61,7 +63,7 @@ const Sidebar = () => {
             <Menu
                 theme="dark"
                 mode="inline"
-                className="pt-4 p-1 bg-[#161616]"
+                className="pt-4 p-1 bg-[#161616] h-[80%]"
                 selectedKeys={[getSelectedKey()]}
                 items={[
                     {
@@ -82,6 +84,11 @@ const Sidebar = () => {
                 ]}
                 onSelect={handleNavigation}
             />
+
+            <div style={{ paddingTop: '20px', textAlign: 'center', borderTop: '1px solid #333' }}>
+                <LogOut />
+            </div>
+
         </Sider>
     );
 };
