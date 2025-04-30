@@ -6,8 +6,10 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button } from 'antd';
+import {Layout, Menu, Button, Typography} from 'antd';
 import { useLocation, useNavigate } from 'react-router';
+
+import logo from '../items/logo.png'
 
 import LogOut from './LogOut';
 
@@ -38,7 +40,7 @@ const Sidebar = () => {
     };
 
     return (
-        <Sider trigger={null} collapsible collapsed={collapsed} width={240} className="bg-[#161616]">
+        <Sider trigger={null} collapsible collapsed={collapsed} width={240} collapsedWidth={90} className="bg-[#161616]">
             <div
                 style={{
                     padding: '0 16px',
@@ -51,19 +53,29 @@ const Sidebar = () => {
             >
                 <Button
                     type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                     onClick={() => setCollapsed(!collapsed)}
-                    style={{
-                        fontSize: '18px',
-                        color: '#fff',
-                    }}
-                />
+                    className="flex items-center bg-transparent border-none hover:scale-105 hover:brightness-90 transition-all duration-300"
+                >
+                    <img
+                        src={logo}
+                        alt="Loading..."
+                        className={`${collapsed ? "w-10 h-10" : "w-10 h-10"} object-contain transition-all duration-300`}
+                    />
+                    {!collapsed && (
+                        <h1 className="text-[#8D151F] font-bold text-md ml-3 transition-all duration-300">
+                            Igraona Igraona
+                        </h1>
+                    )}
+                </Button>
+
+
             </div>
+
 
             <Menu
                 theme="dark"
                 mode="inline"
-                className="pt-4 p-1 bg-[#161616] h-[80%]"
+                className="pt-4 p-1 bg-[#161616] h-[80%] "
                 selectedKeys={[getSelectedKey()]}
                 items={[
                     {
@@ -86,7 +98,7 @@ const Sidebar = () => {
             />
 
             <div style={{ paddingTop: '20px', textAlign: 'center', borderTop: '1px solid #333' }}>
-                <LogOut />
+                <LogOut collapsed={collapsed} />
             </div>
 
         </Sider>

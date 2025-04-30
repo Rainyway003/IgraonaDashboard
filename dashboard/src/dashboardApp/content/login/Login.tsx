@@ -83,7 +83,6 @@ export default function Login() {
                 <div style={{ ...styles.header, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                     <img src={logo} alt="Loading..." className="w-[30%] h-[30%]" />
                     <Title style={{ ...styles.title, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} className="mt-4">Prijavi se!</Title>
-                    <Text style={styles.text}>Dobrodošao Admine, upiši svoje podatke!</Text>
                 </div>
                 <Form
                     name="normal_login"

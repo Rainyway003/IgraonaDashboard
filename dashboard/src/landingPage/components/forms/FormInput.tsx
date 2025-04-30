@@ -1,6 +1,6 @@
 import React from "react";
 import StarIcon from "@mui/icons-material/Star";
-import { Form, Input } from "antd";
+import {Form, Input} from "antd";
 
 interface FormInputProps {
   className?: string;
@@ -12,13 +12,13 @@ interface FormInputProps {
 }
 
 const FormInput: React.FC<FormInputProps> = ({
-  className,
-  type = "text",
-  placeholder,
-  name,
-  required,
-  onChange,
-}) => {
+                                               className,
+                                               type = "text",
+                                               placeholder,
+                                               name,
+                                               required,
+                                               onChange,
+                                             }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -36,14 +36,16 @@ const FormInput: React.FC<FormInputProps> = ({
   };
 
   return (
-    <Form.Item className="bg-[#181818] rounded px-1 flex items-center" name={name} rules={[{ required: true }]}>
-      <Input
-        className={`${className} bg-[#181818] lg:w-[30rem] sm:h-14 max-sm:w-80 max-lg:w-96 max-[800px]:w-80 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#8D151F]`}
-        type={type}
-        placeholder={placeholder}
-        onChange={handleChange}
-      />
-    </Form.Item>
+      <Form.Item name={name} rules={[{required: required}]}>
+        <Input
+            className={`${className} bg-[#181818] w-[512px] text-white px-4 py-2 rounded focus:ring-2 focus:ring-[#8D151F]`}
+            variant="borderless"
+            size="large"
+            type={type}
+            placeholder={placeholder}
+            onChange={handleChange}
+        />
+      </Form.Item>
   );
 };
 

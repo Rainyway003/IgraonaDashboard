@@ -23,3 +23,8 @@ html {
     font-family: "Roboto", sans-serif;
     font-style: normal;
 }
+
+.ant-menu-item-selected {
+    border-left: 4px solid #8D151F !important;
+    background-color: #2a2a2a !important;
+}

@@ -41,7 +41,7 @@ const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({ children }) => {
             key: 'actions',
             render: (_: any, record: any) => (
                 <Space>
-                    <EditButton hideText size="small" resource="tournaments" recordItemId={record.id} />
+                    <EditButton hideText size="small" resource="tournaments" recordItemId={record.id} onClick={() => navigate(`/tournaments/${record.id}`)}></EditButton>
                     <DeleteButton hideText size="small" resource="tournaments" recordItemId={record.id} />
                 </Space>
             ),
@@ -76,13 +76,6 @@ const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({ children }) => {
                             pageSize: 5,
                             position: ['bottomCenter'],
                         }}
-                        onRow={(record) => ({
-                            onClick: (event) => {
-                                const target = event.target as HTMLElement;
-                                if (target.closest('button')) return;
-                                navigate(`/tournaments/${record.id}`);
-                            },
-                        })}
                     />
 
                     {children}

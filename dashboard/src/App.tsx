@@ -44,34 +44,36 @@ function App() {
               projectId: "4cEHo1-TlgDsX-WcifnB",
             }}
           >
-            <Authenticated key="protected" fallback={<Login></Login>}>
-              <Routes>
-                <Route index element={<LandingApp />} />
-                <Route path="/t" element={<ShowTLanding />} />
-                <Route path="/t/:id" element={<SignUpScreen />} />
-                <Route element={<AppLayout />}>
-                  <Route path="/tournaments" >
-                    <Route index element={<ShowTournaments />} />
-                    <Route path="new" element={<CreateTournament />} />
-                    <Route path="edit/:id" element={<EditTournament />} />
-                  </Route>
-                  <Route path="/tournaments/:id" >
-                    <Route index element={<ShowTeams />} />
-                  </Route>
-                  <Route path="/tournaments/:id/:name" >
-                    <Route index element={<ShowPlayers />} />
-                  </Route>
-                  <Route path="/dashboard" element={<Home />} />
+            <Routes>
+              <Route index element={<LandingApp />} />
+              <Route path="/t" element={<ShowTLanding />} />
+              <Route path="/t/:id" element={<SignUpScreen />} />
+              <Route element={<Authenticated key="protected" fallback={<Login></Login>}><AppLayout /></Authenticated>}>
+                <Route path="/tournaments" >
+                  <Route index element={<ShowTournaments />} />
+                  <Route path="new" element={<CreateTournament />} />
+                  <Route path="edit/:id" element={<EditTournament />} />
                 </Route>
-              </Routes>
-              <RefineKbar />
-              <UnsavedChangesNotifier />
-              <DocumentTitleHandler />
-            </Authenticated>
+                <Route path="/tournaments/:id" >
+                  <Route index element={<ShowTeams />} />
+                </Route>
+                <Route path="/tournaments/:id/:name" >
+                  <Route index element={<ShowPlayers />} />
+                </Route>
+                <Route path="/dashboard" element={<Home />} />
+                <Route path="/games">
+                  <Route index element={<ShowGames/>}/>
+                  <Route path={'new'} element={<CreateGame/>}/>
+                </Route>
+              </Route>
+            </Routes>
+            <RefineKbar />
+            <UnsavedChangesNotifier />
+            <DocumentTitleHandler />
           </Refine>
         </AntdApp>
       </RefineKbarProvider>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 
