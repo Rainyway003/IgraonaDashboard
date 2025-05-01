@@ -1,4 +1,4 @@
-import { IResourceItem } from "@refinedev/core";
+import {IResourceItem} from "@refinedev/core";
 
 export const resources: IResourceItem[] = [
     {
@@ -12,11 +12,18 @@ export const resources: IResourceItem[] = [
         edit: '/tournaments/edit/:id'
     },
     {
-        name: 'teams',
+        name: 'participants',
         list: '/tournaments/:id',
+        edit: '/tournaments/:id/:name/edit'
     },
     {
         name: 'players',
         list: '/tournaments/:id/:name',
+    },
+    {
+        name: 'games',
+        list: '/games',
+        create: '/games/new',
+        edit: '/games/edit/:id'
     },
 ]

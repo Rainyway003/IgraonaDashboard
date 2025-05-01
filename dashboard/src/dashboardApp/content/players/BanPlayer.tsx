@@ -14,7 +14,7 @@ const BanPlayer = ({ player }: { player: any }) => {
 
     const handleBan = async () => {
         const docRef = await addDoc(collection(db, 'banned'), {
-            faceit: player.name,
+            faceit: player.url,
             name: name,
             reason: reason,
             timestamp: new Date()
@@ -36,7 +36,7 @@ const BanPlayer = ({ player }: { player: any }) => {
 
     return (
         <div>
-            <Button type="primary" onClick={showModal}>
+            <Button type="primary" onClick={showModal} className='antbutton'>
                 BAN
             </Button>
             <Modal title="Banaj Čovika" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>

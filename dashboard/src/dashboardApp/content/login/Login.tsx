@@ -33,7 +33,7 @@ export default function Login() {
     };
 
     const admin = {
-        email: 'p23.io@gmail.com',
+        email: 'admin@igraona.gg',
         password: 'igraona123',
     };
 
