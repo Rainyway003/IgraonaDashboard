@@ -3,6 +3,7 @@ import {
     TrophyOutlined,
     HomeOutlined,
     AimOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
 import {Layout, Menu, Button} from 'antd';
 import { useLocation, useNavigate } from 'react-router';
@@ -24,6 +25,7 @@ const Sidebar = () => {
             '1': '/dashboard',
             '2': '/tournaments',
             '3': '/games',
+            '4': '/banned',
         };
 
         const targetRoute = routes[key];
@@ -39,6 +41,7 @@ const Sidebar = () => {
         if (currentPath.includes('/dashboard')) return '1';
         if (currentPath.includes('/tournaments')) return '2';
         if (currentPath.includes('/games')) return '3';
+        if (currentPath.includes('/banned')) return '4';
         return '1';
     };
 
@@ -94,6 +97,11 @@ const Sidebar = () => {
                         key: '3',
                         icon: <AimOutlined />,
                         label: 'Games',
+                    },
+                    {
+                        key: '4',
+                        icon: <DeleteOutlined />,
+                        label: 'Banned',
                     },
                 ]}
                 onSelect={handleNavigation}

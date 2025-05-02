@@ -44,13 +44,14 @@ const dataProvider: DataProvider = {
 
             let turnirQuery = query(turnirDoc)
 
-            if(sorters > 0) {
-                sorters.forEach((sorter: any) => {
-                    turnirQuery = query(turnirQuery, orderBy(sorter.field, sorter.order || 'asc'))
-                })
-            }
+        if (sorters && sorters.length > 0) {
+            sorters.forEach((sorter: any) => {
+                turnirQuery = query(turnirQuery, orderBy(sorter.field, sorter.order || 'asc'));
+            });
+        }
 
-            const turnirSnap = await getDocs(turnirQuery)
+
+        const turnirSnap = await getDocs(turnirQuery)
 
             const data = turnirSnap.docs.map((doc) => ({
                 id: doc.id,
@@ -127,7 +128,7 @@ const dataProvider: DataProvider = {
     deleteOne: async <TData = any, TVariables = {}>(
         {resource, id, meta}: DeleteOneParams<TVariables>
     ): Promise<DeleteOneResponse<TData>> => {
-        if (resource === "tournaments" || resource === "games") {
+        if (resource === "tournaments" || resource === "games" || resource === "banned") {
             const docRef = doc(db, resource, id as string);
             await deleteDoc(docRef);
 

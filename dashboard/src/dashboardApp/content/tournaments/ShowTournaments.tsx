@@ -11,8 +11,8 @@ import { useNavigate } from 'react-router';
 const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const navigate = useNavigate()
 
-    const [filter, setFilter] = useState("Dnd")
     const [selectedGame, setSelectedGame] = useState<string | undefined>(undefined);
+    const [sorters, setSorters] = useState([]);
 
     const {selectProps} = useSelect({
         resource: 'games',
@@ -34,15 +34,10 @@ const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         filters: selectedGame
             ? [{ field: "game", operator: "contains", value: selectedGame }]
             : [],
-        sorters: [
-            {
-                field: 'maxNumberOfParticipants',
-                order: 'asc'
-            }
-        ],
+        sorters: sorters,
     })
 
-
+    console.log("Sorteri:", sorters);
 console.log('ev',selectProps)
 
     const columns = [
@@ -56,40 +51,25 @@ console.log('ev',selectProps)
             title: 'Naziv turnira',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
             filteredValue: null
         },
-        {
-            title: 'Naziv turnira',
-            dataIndex: 'gameName',
-            key: 'gameName',
-        },
-
         {
             title: 'Igra',
             dataIndex: 'game',
             key: 'game',
-            filters: [
-                { text: 'Dnd', value: 'Dnd' },
-                { text: 'Fifa', value: 'Fifa' },
-                { text: 'Chess', value: 'Chess' },
-            ],
+            filters: selectProps.options?.map((option: any) => ({
+                text: option.label,
+                value: option.value,
+            })),
             filterMultiple: false,
             onFilter: (value, record) => record.game === value,
-            filterDropdown: () => (
-                <div style={{ padding: 8 }}>
-                    <Select
-                        value={filter}
-                        onChange={(value) => setFilter(value)}
-                        style={{ width: 200 }}
-                        {...selectProps} // koristimo selectProps za opcije
-                    />
-                </div>
-            ),
         },
         {
             title: 'Prijave',
             dataIndex: 'numberOfParticipants',
             key: 'numberOfParticipants',
+            sorter: true,
             render: (_: any, record: any) => (
                 <Space>
                     {record.numberOfParticipants || 0} / {record.maxNumberOfParticipants || 0}
@@ -108,11 +88,13 @@ console.log('ev',selectProps)
             title: 'Početak',
             dataIndex: 'startingAt',
             key: 'startingAt',
+            sorter: true,
         },
         {
             title: 'Kraj',
             dataIndex: 'endingAt',
             key: 'endingAt',
+            sorter: true,
         },
         {
             title: 'Akcije',
@@ -154,6 +136,16 @@ console.log('ev',selectProps)
                         pagination={{
                             pageSize: 5,
                             position: ['bottomCenter'],
+                        }}
+                        onChange={(pagination, filters, sorter) => {
+                            const sorterArray = Array.isArray(sorter) ? sorter : [sorter];
+                            const formattedSorters = sorterArray
+                                .filter((s) => s.order)
+                                .map((s) => ({
+                                    field: s.field,
+                                    order: s.order === "ascend" ? "asc" : "desc",
+                                }));
+                            setSorters(formattedSorters);
                         }}
                     />
 

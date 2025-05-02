@@ -26,4 +26,10 @@ export const resources: IResourceItem[] = [
         create: '/games/new',
         edit: '/games/edit/:id'
     },
+    {
+        name: 'banned',
+        list: '/banned',
+        create: '/banned/new',
+        edit: '/banned/edit/:id'
+    },
 ]

@@ -29,6 +29,8 @@ import CreateTeam from "./dashboardApp/content/teams/create/CreateTeam";
 import EditTeam from "./dashboardApp/content/teams/edit/EditTeam";
 import ShowGames from "./dashboardApp/content/games/ShowGames";
 import CreateGame from "./dashboardApp/content/games/create/CreateGame";
+import ShowBanned from "./dashboardApp/content/banned/ShowBanned";
+import CreateBan from "./dashboardApp/content/banned/create/CreateBan";
 
 function App() {
     return (
@@ -71,6 +73,10 @@ function App() {
                                 <Route path="/games">
                                     <Route index element={<ShowGames/>}/>
                                     <Route path={'new'} element={<CreateGame/>}/>
+                                </Route>
+                                <Route path="/banned">
+                                    <Route index element={<ShowBanned/>}/>
+                                    <Route path={'new'} element={<CreateBan/>}/>
                                 </Route>
                             </Route>
                         </Routes>

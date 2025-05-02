@@ -15,7 +15,6 @@ const BanPlayer = ({ player }: { player: any }) => {
     const handleBan = async () => {
         const docRef = await addDoc(collection(db, 'banned'), {
             faceit: player.url,
-            name: name,
             reason: reason,
             timestamp: new Date()
         });
@@ -40,11 +39,6 @@ const BanPlayer = ({ player }: { player: any }) => {
                 BAN
             </Button>
             <Modal title="Banaj Čovika" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <Input
-                    placeholder="Naziv Igrača"
-                    onChange={(e) => setName(e.target.value)}
-                    className="mb-3 mt-1"
-                />
                 <Input
                     placeholder="Razlog"
                     onChange={(e) => setReason(e.target.value)}
