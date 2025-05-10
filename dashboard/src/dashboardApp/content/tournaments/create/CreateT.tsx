@@ -1,8 +1,9 @@
-import {Button, Checkbox, Form, Input, Layout, Select, Space, theme} from 'antd'
+import {Button, Checkbox, DatePicker, Form, Input, Layout, Select, Space, theme} from 'antd'
 import {useNavigate} from 'react-router'
 import React, {useState} from 'react';
 import {useCreate} from '@refinedev/core';
 import {CreateButton, useSelect} from "@refinedev/antd";
+import dayjs from 'dayjs'
 import {MinusCircleOutlined, PlusOutlined, ArrowLeftOutlined, PlusSquareOutlined} from '@ant-design/icons';
 
 const {Content} = Layout
@@ -13,8 +14,13 @@ const CreateTournament = () => {
     const navigate = useNavigate();
     const [checked, setChecked] = useState(false);
 
+
     const toggleChecked = () => {
         setChecked(!checked);
+    };
+
+    const disablePastDates = (current) => {
+        return current && current < dayjs().startOf('day');
     };
 
 
@@ -29,11 +35,14 @@ const CreateTournament = () => {
     } = theme.useToken();
 
     const onFinish = (values: any) => {
+        const formattedValues = {
+            ...values,
+            startingAt: values.startingAt ? values.startingAt.format('DD-MM-YYYY') : null,
+            endingAt: checked ? values.endingAt ? values.endingAt.format('DD-MM-YYYY') : null : values.startingAt ? values.startingAt.format('DD-MM-YYYY') : null,
+        };
         mutate({
             resource: 'tournaments',
-            values: {
-                ...values
-            }
+            values: formattedValues,
         })
         navigate('/tournaments')
     }
@@ -58,7 +67,7 @@ const CreateTournament = () => {
                                     type="primary"
                                     className="antbutton"
                                     onClick={() => navigate('/tournaments')}
-                                    icon={<ArrowLeftOutlined />}
+                                    icon={<ArrowLeftOutlined/>}
                                 >
                                     Back
                                 </CreateButton>
@@ -67,7 +76,7 @@ const CreateTournament = () => {
                                     type="primary"
                                     htmlType="submit"
                                     className="antbutton"
-                                    icon={<PlusSquareOutlined />}
+                                    icon={<PlusSquareOutlined/>}
                                 >
                                     Submit
                                 </Button>
@@ -110,13 +119,14 @@ const CreateTournament = () => {
                                                 {...restField}
                                                 name={name}
                                                 rules={[{required: true}]}
+                                                label={`${name + 1}. Mjesto`}
                                             >
                                                 <Input placeholder={`${name + 1}`}/>
                                             </Form.Item>
                                             <MinusCircleOutlined onClick={() => remove(name)}/>
                                         </Space>
                                     ))}
-                                    <Form.Item>
+                                    <Form.Item label={"Nagrade"}>
                                         <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
                                             Add field
                                         </Button>
@@ -152,7 +162,7 @@ const CreateTournament = () => {
                                 name={'startingAt'}
                                 rules={[{required: true}]}
                             >
-                                <Input type="date"/>
+                                <DatePicker format="DD-MM-YYYY" disabledDate={disablePastDates}/>
                             </Form.Item>
                             <div className="flex space-x-2">
                                 <p>
@@ -169,7 +179,7 @@ const CreateTournament = () => {
                                             rules={[{required: checked}]}
                                             hidden={!checked}
                                         >
-                                            <Input type="date"/>
+                                            <DatePicker format="DD-MM-YYYY" disabledDate={disablePastDates}/>
                                         </Form.Item>
                                         :
                                         <></>

@@ -1,15 +1,14 @@
-import { Button, Input } from "antd";
-import { addDoc, collection } from "firebase/firestore";
-import { useState } from "react"
-import { db } from "../../providers/firebase";
-import { Modal } from 'antd'
+import {Button, Input} from "antd";
+import {addDoc, collection} from "firebase/firestore";
+import {useState} from "react"
+import {db} from "../../providers/firebase";
+import {Modal} from 'antd'
 
 
-const BanPlayer = ({ player }: { player: any }) => {
+const BanPlayer = ({player}: { player: any }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('')
     const [reason, setReason] = useState('')
-
 
 
     const handleBan = async () => {

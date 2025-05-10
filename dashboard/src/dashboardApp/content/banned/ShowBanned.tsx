@@ -25,7 +25,7 @@ const ShowBanned: FC = () => {
             key: 'faceit',
             render: (_: any, record: any) => (
                 <Space>
-                <a href={record.faceit}>{record.faceit}</a>
+                    <a href={record.faceit}>{record.faceit}</a>
                 </Space>
             ),
         },

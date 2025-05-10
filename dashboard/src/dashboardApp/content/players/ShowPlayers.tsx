@@ -1,21 +1,21 @@
-import React, { PropsWithChildren } from 'react';
-import { Layout, theme, Table, Space } from 'antd';
+import React, {PropsWithChildren} from 'react';
+import {Layout, theme, Table, Space} from 'antd';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
-import { useOne } from "@refinedev/core"
-import { useParams } from 'react-router';
+import {useOne} from "@refinedev/core"
+import {useParams} from 'react-router';
 
 import BanPlayer from './BanPlayer';
 
-const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({ children, teamId }) => {
-    const { id } = useParams();
+const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({children, teamId}) => {
+    const {id} = useParams();
 
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();
 
-    const { data, isLoading } = useOne({
+    const {data, isLoading} = useOne({
         resource: "participants",
         id: id,
         meta: {
@@ -25,7 +25,7 @@ const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({ children, teamId }) => {
 
     const columns = [
         {
-            title: 'Ime igrača',
+            title: 'Faceit Igrača',
             dataIndex: 'player1',
             key: 'player1',
             render: (_: any, record: any) => (
@@ -49,13 +49,12 @@ const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({ children, teamId }) => {
     console.log(data?.data.players)
 
     return (
-        <Layout className="h-screen" style={{ display: 'flex', flexDirection: 'row' }}>
-
-            <Layout style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
+            <Layout style={{ backgroundColor: '#f0f2f5', borderRadius: borderRadiusLG,}}>
                 <Content
                     style={{
-                        margin: '24px 16px',
-                        padding: 24,
+                        margin: '1px 1px',
+                        width: '100%',
+                        padding: 4,
                         minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,
@@ -68,7 +67,7 @@ const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({ children, teamId }) => {
                         columns={columns}
                         rowKey="id"
                         pagination={{
-                            pageSize: 6,
+                            pageSize: 2,
                             position: ['bottomCenter'],
                         }}
                         onRow={(record) => ({
@@ -89,7 +88,6 @@ const ShowPlayers: React.FC<PropsWithChildren<{}>> = ({ children, teamId }) => {
                 </Content>
             </Layout>
 
-        </Layout>
     );
 };
 

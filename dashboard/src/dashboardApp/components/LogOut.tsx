@@ -1,14 +1,14 @@
-import { LogoutOutlined } from "@ant-design/icons";
-import { useLogout } from "@refinedev/core";
-import { Button, Spin } from "antd";
+import {LogoutOutlined} from "@ant-design/icons";
+import {useLogout} from "@refinedev/core";
+import {Button, Spin} from "antd";
 import React from "react";
 
 interface LogOutProps {
     collapsed: boolean;
 }
 
-const LogOut: React.FC<LogOutProps> = ({ collapsed }) => {
-    const { mutate, isLoading } = useLogout();
+const LogOut: React.FC<LogOutProps> = ({collapsed}) => {
+    const {mutate, isLoading} = useLogout();
 
     const handleLogout = () => {
         try {
@@ -20,8 +20,8 @@ const LogOut: React.FC<LogOutProps> = ({ collapsed }) => {
 
     if (isLoading) {
         return (
-            <div style={{ textAlign: "center", paddingTop: "20px" }}>
-                <Spin size="large" />
+            <div style={{textAlign: "center", paddingTop: "20px"}}>
+                <Spin size="large"/>
             </div>
         );
     }

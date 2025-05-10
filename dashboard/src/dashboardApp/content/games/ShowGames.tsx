@@ -1,9 +1,8 @@
 import React, {FC} from 'react'
 import {Avatar, Layout, Space, Table, theme} from "antd";
-import {CreateButton, DeleteButton, EditButton} from "@refinedev/antd";
+import {CreateButton, DeleteButton} from "@refinedev/antd";
 import {useNavigate} from 'react-router';
 import {useList} from "@refinedev/core";
-import {AntDesignOutlined, ArrowLeftOutlined} from "@ant-design/icons";
 
 const {Content} = Layout;
 

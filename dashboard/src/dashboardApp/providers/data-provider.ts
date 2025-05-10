@@ -18,17 +18,23 @@ import {
     query,
     orderBy,
     updateDoc,
-    WithFieldValue
+    WithFieldValue,
+    increment
 } from "firebase/firestore";
 import {db} from "./firebase";
 
 const dataProvider: DataProvider = {
-    getList: async ({ resource, meta, sorters, filters }: { resource: string, meta?: any, sorters: any, filters: any }): Promise<{ data: any, total: number }> => {
-        if(resource === "participants" && meta?.id) {
+    getList: async ({resource, meta, sorters, filters}: {
+        resource: string,
+        meta?: any,
+        sorters: any,
+        filters: any
+    }): Promise<{ data: any, total: number }> => {
+        if (resource === "participants" && meta?.id) {
             const teamsDoc = collection(db, "tournaments", String(meta.id), resource)
             const teamsSnap = await getDocs(teamsDoc)
 
-            console.log('evo',teamsSnap)
+            console.log('evo', teamsSnap)
 
             const teams = teamsSnap.docs.map((doc) => ({
                 ...doc.data(),
@@ -40,9 +46,9 @@ const dataProvider: DataProvider = {
             return {data: teams, total: teams.length}
         }
 
-            const turnirDoc = collection(db, resource)
+        const turnirDoc = collection(db, resource)
 
-            let turnirQuery = query(turnirDoc)
+        let turnirQuery = query(turnirDoc)
 
         if (sorters && sorters.length > 0) {
             sorters.forEach((sorter: any) => {
@@ -53,10 +59,10 @@ const dataProvider: DataProvider = {
 
         const turnirSnap = await getDocs(turnirQuery)
 
-            const data = turnirSnap.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }))
+        const data = turnirSnap.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }))
 
 
         return {
@@ -99,6 +105,11 @@ const dataProvider: DataProvider = {
                 variables as WithFieldValue<DocumentData>
             );
 
+            const turnirDoc = doc(db, "tournaments", variables.id);
+            await updateDoc(turnirDoc, {
+                numberOfParticipants: increment(1),
+            })
+
             return {
                 data: {
                     id: docRef.id,
@@ -136,39 +147,85 @@ const dataProvider: DataProvider = {
                 data: {id} as TData,
             };
         } else if (resource === "participants") {
-            const teamName = meta?.tName
-
-            const docRef = doc(db, "tournaments", String(id), resource, String(id))
-            await updateDoc(docRef, {
-                [`teams.${teamName}`]: deleteField(),
-            })
+            const docRef = doc(db, "tournaments", String(meta?.id), resource, String(id))
+            console.log(docRef)
+            await deleteDoc(docRef);
 
             return {
                 data: {id} as TData,
             };
         }
     },
-    getOne: async ({ resource, id, meta }: { resource: string, id: any, meta?: any }): Promise<{ data: any }> => {
-        const teamRef = doc(db, "tournaments", String(id), resource, String(meta.teamId));
-        const teamSnap = await getDoc(teamRef);
+    getOne: async ({resource, id, meta}: { resource: string, id: any, meta?: any }): Promise<{ data: any }> => {
+        if (resource === "participants") {
+            const teamRef = doc(db, "tournaments", String(id), resource, String(meta?.teamId));
+            const teamSnap = await getDoc(teamRef);
 
-        const teamData = teamSnap.data();
+            const teamData = teamSnap.data();
 
-        console.log('evonja',teamData)
+            console.log('evonja', teamData);
 
-        if(teamData) {
-            const players = Object.entries(teamData)
-                .filter(([key, value]) => key.startsWith("player"))
-                .map(([key, url], index) => ({
-                    name: `Player ${index + 1}`,
-                    url,
-                }));
+            if (teamData) {
+                const players = Object.entries(teamData)
+                    .filter(([key]) => key.startsWith("player"))
+                    .map(([key, url], index) => ({
+                        name: `Player ${index + 1}`,
+                        url,
+                    }));
 
-            return { data: { players } };
+                return {data: {players}};
+            }
+
+            return {data: {players: []}};
         }
 
-        return { data: { players: [] } };
+        const docRef = doc(db, resource, String(id));
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            throw new Error(`Document with id ${id} not found`);
+        }
+
+        const data = {
+            id: docSnap.id,
+            ...(docSnap.data() as TData),
+        };
+
+        if (resource === "tournaments") {
+            const participantRef = doc(db, resource, String(id), "participants", String(id));
+            const participantSnap = await getDoc(participantRef);
+
+            if (participantSnap.exists()) {
+                const teamsMap = participantSnap.data().teams;
+
+                if (teamsMap) {
+                    const teams = Object.keys(teamsMap).map((teamKey) => {
+                        const team = teamsMap[teamKey];
+                        return {
+                            id: teamKey,
+                            name: team.name,
+                            players: [
+                                team.player1,
+                                team.player2,
+                                team.player3,
+                                team.player4,
+                            ],
+                        };
+                    });
+
+                    data["teams"] = teams;
+                    (data as any).teams = teams;
+                    console.log('EventCounts', teams);
+                }
+            } else {
+                console.log('Nema timova.');
+                (data as any).teams = [];
+            }
+        }
+
+        return {data};
     },
+
 
     getApiUrl: () => "",
 }

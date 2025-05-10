@@ -56,7 +56,7 @@ const CreateBan: FC = () => {
                                     type="primary"
                                     className="antbutton"
                                     onClick={() => navigate('/banned')}
-                                    icon={<ArrowLeftOutlined />}
+                                    icon={<ArrowLeftOutlined/>}
                                 >
                                     Back
                                 </CreateButton>
@@ -65,7 +65,7 @@ const CreateBan: FC = () => {
                                     type="primary"
                                     htmlType="submit"
                                     className="antbutton"
-                                    icon={<PlusSquareOutlined />}
+                                    icon={<PlusSquareOutlined/>}
                                 >
                                     Submit
                                 </Button>

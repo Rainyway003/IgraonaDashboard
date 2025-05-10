@@ -1,21 +1,21 @@
-import React, { PropsWithChildren } from 'react';
-import { Layout, theme, List, Avatar, Typography } from 'antd';
-import { AntDesignOutlined } from '@ant-design/icons';
+import React, {PropsWithChildren} from 'react';
+import {Layout, theme, List, Avatar, Typography} from 'antd';
+import {AntDesignOutlined} from '@ant-design/icons';
 
-const { Content } = Layout;
-const { Title } = Typography;
+const {Content} = Layout;
+const {Title} = Typography;
 
-import { useList } from "@refinedev/core";
-import { useNavigate } from 'react-router';
+import {useList} from "@refinedev/core";
+import {useNavigate} from 'react-router';
 
-const ShowTLanding: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+const ShowTLanding: React.FC<PropsWithChildren<{}>> = ({children}) => {
     const navigate = useNavigate();
 
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();
 
-    const { data, isLoading } = useList({
+    const {data, isLoading} = useList({
         resource: "tournaments",
     });
 
@@ -24,8 +24,8 @@ const ShowTLanding: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     }
 
     return (
-        <Layout className="h-screen" style={{ display: 'flex', flexDirection: 'row' }}>
-            <Layout style={{ flex: 1, backgroundColor: '#161616' }}>
+        <Layout className="h-screen" style={{display: 'flex', flexDirection: 'row'}}>
+            <Layout style={{flex: 1, backgroundColor: '#161616'}}>
                 <Content
                     style={{
                         margin: '24px 16px',
@@ -35,8 +35,8 @@ const ShowTLanding: React.FC<PropsWithChildren<{}>> = ({ children }) => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                        <Title level={2} style={{ color: '#8D151F' }}>Turniri</Title>
+                    <div style={{textAlign: 'center', marginBottom: '20px'}}>
+                        <Title level={2} style={{color: '#8D151F'}}>Turniri</Title>
                     </div>
 
                     <List
@@ -57,8 +57,8 @@ const ShowTLanding: React.FC<PropsWithChildren<{}>> = ({ children }) => {
                                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#333333')}
                             >
                                 <List.Item.Meta
-                                    title={<span style={{ color: '#8D151F', fontWeight: "bold" }}>{turnir.name}</span>}
-                                    description={<span style={{ color: '#a83a44' }}>{`ID turnira: ${turnir.id}`}</span>}
+                                    title={<span style={{color: '#8D151F', fontWeight: "bold"}}>{turnir.name}</span>}
+                                    description={<span style={{color: '#a83a44'}}>{`ID turnira: ${turnir.id}`}</span>}
                                     className="text-center"
                                 />
                             </List.Item>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
     TrophyOutlined,
     HomeOutlined,
@@ -6,13 +6,13 @@ import {
     DeleteOutlined,
 } from '@ant-design/icons';
 import {Layout, Menu, Button} from 'antd';
-import { useLocation, useNavigate } from 'react-router';
+import {useLocation, useNavigate} from 'react-router';
 
 import logo from '../items/logo.png'
 
 import LogOut from './LogOut';
 
-const { Sider } = Layout;
+const {Sider} = Layout;
 
 const Sidebar = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -20,7 +20,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleNavigation = ({ key }: { key: string }) => {
+    const handleNavigation = (key: string) => {
         const routes: { [key: string]: string } = {
             '1': '/dashboard',
             '2': '/tournaments',
@@ -28,12 +28,7 @@ const Sidebar = () => {
             '4': '/banned',
         };
 
-        const targetRoute = routes[key];
-        const currentPath = location.pathname;
-
-        if (!currentPath.startsWith(targetRoute) || currentPath !== targetRoute) {
-            navigate(targetRoute);
-        }
+       navigate(routes[key], {replace: true});
     };
 
     const getSelectedKey = () => {
@@ -46,7 +41,8 @@ const Sidebar = () => {
     };
 
     return (
-        <Sider trigger={null} collapsible collapsed={collapsed} width={240} collapsedWidth={90} className="bg-[#161616]">
+        <Sider trigger={null} collapsible collapsed={collapsed} width={240} collapsedWidth={90}
+               className="bg-[#161616]">
             <div
                 style={{
                     padding: '0 16px',
@@ -85,30 +81,33 @@ const Sidebar = () => {
                 items={[
                     {
                         key: '1',
-                        icon: <HomeOutlined/>,
+                        icon: <HomeOutlined />,
                         label: 'Početna',
+                        onClick: () => handleNavigation('1')
                     },
                     {
                         key: '2',
                         icon: <TrophyOutlined />,
                         label: 'Turniri',
+                        onClick: () => handleNavigation('2')
                     },
                     {
                         key: '3',
                         icon: <AimOutlined />,
                         label: 'Games',
+                        onClick: () => handleNavigation('3')
                     },
                     {
                         key: '4',
                         icon: <DeleteOutlined />,
                         label: 'Banned',
+                        onClick: () => handleNavigation('4')
                     },
                 ]}
-                onSelect={handleNavigation}
             />
 
-            <div style={{ paddingTop: '20px', textAlign: 'center', borderTop: '1px solid #333' }}>
-                <LogOut collapsed={collapsed} />
+            <div style={{paddingTop: '20px', textAlign: 'center', borderTop: '1px solid #333'}}>
+                <LogOut collapsed={collapsed}/>
             </div>
 
         </Sider>

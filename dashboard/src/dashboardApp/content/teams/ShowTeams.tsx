@@ -1,12 +1,12 @@
-import React, { PropsWithChildren } from 'react';
-import { Layout, theme, Table, Avatar, Space } from 'antd';
-import { EyeOutlined, ArrowLeftOutlined} from '@ant-design/icons';
+import React, {PropsWithChildren, useState} from 'react';
+import {Layout, theme, Table, Avatar, Space} from 'antd';
+import {EyeOutlined, ArrowLeftOutlined} from '@ant-design/icons';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
-import { useList } from "@refinedev/core"
-import { CreateButton, DeleteButton, EditButton } from '@refinedev/antd';
-import { useNavigate, useParams } from 'react-router';
+import {useList} from "@refinedev/core"
+import {CreateButton, DeleteButton, EditButton} from '@refinedev/antd';
+import {useNavigate, useParams} from 'react-router';
 import ShowPlayers from "../players/ShowPlayers";
 
 interface ShowPlayersProps {
@@ -14,17 +14,18 @@ interface ShowPlayersProps {
 }
 
 const ShowTeams: React.FC<ShowPlayersProps> = ({ children }) => {
-    const { id } = useParams();
+    const {id} = useParams();
 
     const [teamId, setTeamId] = React.useState<any | undefined>(undefined);
+    const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
     const navigate = useNavigate()
 
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();
 
-    const { data, isLoading } = useList({
+    const {data, isLoading} = useList({
         resource: "participants",
         meta: {
             tournamentId: id,
@@ -51,59 +52,80 @@ const ShowTeams: React.FC<ShowPlayersProps> = ({ children }) => {
             key: 'actions',
             render: (_: any, record: any) => (
                 <Space>
-                    <EditButton hideText size="small" resource="tournaments" icon={<EyeOutlined />} recordItemId={record.id} onClick={() => handleEdit(record)}></EditButton>
-                    <DeleteButton hideText size="small" resource="tournaments" recordItemId={record.id} />
+                    <EditButton hideText size="small" resource="tournaments" icon={<EyeOutlined/>}
+                                recordItemId={record.id} onClick={() => handleEdit(record)}></EditButton>
+                    {/*<EditButton hideText size='small' resource="participants" recordItemId={record.id}/>*/}
+                    <DeleteButton hideText size="small" resource="participants" recordItemId={record.id} meta={{
+                        id: id
+                    }}/>
                 </Space>
             ),
         },
     ];
 
+    const handleExpand = (expanded: boolean, record: any) => {
+        const keys = expanded ? [record.id] : [];
+        setExpandedRowKeys(keys)
+    }
+
+    const expandable = {
+        expandedRowRender: (record: any, expanded: any) => (
+            <div style={{ margin: 0}}>
+                <ShowPlayers teamId={record.id} />
+            </div>
+        ),
+        expandedRowKeys,
+        onExpand: handleExpand,
+    };
+
+    console.log('expand!',expandedRowKeys)
+
     return (
-        <Layout className="h-screen" style={{ display: 'flex', flexDirection: 'row' }}>
-            <Layout style={{ flex: 0.5, backgroundColor: '#f0f2f5' }}>
+        <Layout className="h-screen" style={{display: 'flex', flexDirection: 'row', overflowX: "hidden"}}>
+            <Layout style={{
+                height: expandedRowKeys.length === 1 ? '115.3vh' : '100vh',
+                background: '#f0f2f5'
+            }}>
+                <div className='sticky top-[7px] pr-6 pl-6 z-10 flex justify-between'>
+                    <CreateButton
+                        type="primary"
+                        className="antbutton"
+                        onClick={() => navigate('/tournaments')}
+                        icon={<ArrowLeftOutlined/>}
+                    >
+                        Back
+                    </CreateButton>
+                    <CreateButton
+                        resource="tournaments"
+                        className='antbutton'
+                        onClick={() => navigate(`/tournaments/${id}/new`)}
+                    />
+                </div>
                 <Content
                     style={{
-                        margin: '24px 16px',
+                        margin: '14px 14px',
+                        marginBottom: '13px',
                         padding: 24,
-                        minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,
+                        minHeight: 'calc(100vh - 48px)',
                     }}
                 >
-
-                    <div style={{ marginBottom: 16 }} className='flex justify-between w-full text-right '>
-                        <CreateButton
-                            type="primary"
-                            className="antbutton"
-                            onClick={() => navigate('/tournaments')}
-                            icon={<ArrowLeftOutlined />}
-                        >
-                            Back
-                        </CreateButton>
-                        <CreateButton
-                            resource="tournaments"
-                            className='antbutton'
-                            onClick={() => navigate(`/tournaments/${id}/new`)}
-                        />
-                    </div>
 
                     <Table
                         loading={isLoading}
                         dataSource={data?.data}
                         columns={columns}
                         rowKey="id"
+                        expandable={expandable}
                         pagination={{
-                            pageSize: 10,
+                            pageSize: 5,
                             position: ['bottomCenter'],
                         }}
                     />
 
                     {children}
                 </Content>
-            </Layout>
-
-            <Layout style={{ flex: 0.5 }}>
-                <ShowPlayers teamId={teamId} />
             </Layout>
         </Layout>
     );

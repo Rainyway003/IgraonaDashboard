@@ -1,14 +1,14 @@
 import React, {PropsWithChildren, useState} from 'react';
 import {Layout, theme, Table, Avatar, Space, Progress, Select} from 'antd';
-import { AntDesignOutlined, EyeOutlined } from '@ant-design/icons';
+import {AntDesignOutlined, EyeOutlined} from '@ant-design/icons';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
-import { useList } from "@refinedev/core"
+import {useList} from "@refinedev/core"
 import {CreateButton, DeleteButton, EditButton, useSelect} from '@refinedev/antd';
-import { useNavigate } from 'react-router';
+import {useNavigate} from 'react-router';
 
-const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({children}) => {
     const navigate = useNavigate()
 
     const [selectedGame, setSelectedGame] = useState<string | undefined>(undefined);
@@ -23,29 +23,29 @@ const ShowTournaments: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const tournamentId = window.location.pathname.split('/')[2]
 
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();
 
-    const { data, isLoading } = useList({
+    const {data, isLoading} = useList({
         resource: "tournaments",
         meta: {
             tournamentId,
         },
         filters: selectedGame
-            ? [{ field: "game", operator: "contains", value: selectedGame }]
+            ? [{field: "game", operator: "contains", value: selectedGame}]
             : [],
         sorters: sorters,
     })
 
     console.log("Sorteri:", sorters);
-console.log('ev',selectProps)
+    console.log('ev', selectProps)
 
     const columns = [
         {
             title: 'Avatar',
             dataIndex: 'avatar',
             key: 'avatar',
-            render: () => <Avatar icon={<AntDesignOutlined />} />,
+            render: () => <Avatar icon={<AntDesignOutlined/>}/>,
         },
         {
             title: 'Naziv turnira',
@@ -81,7 +81,8 @@ console.log('ev',selectProps)
             dataIndex: 'numberOfParticipants',
             key: 'numberOfParticipants',
             render: (_: any, record: any) => (
-                <Progress percent={record.numberOfParticipants / record.maxNumberOfParticipants * 100}></Progress>
+                <Progress
+                    percent={Math.floor(record.numberOfParticipants / record.maxNumberOfParticipants * 100)}></Progress>
             ),
         },
         {
@@ -101,32 +102,42 @@ console.log('ev',selectProps)
             key: 'actions',
             render: (_: any, record: any) => (
                 <Space>
-                    <EditButton hideText size="small" resource="tournaments" icon={<EyeOutlined />} recordItemId={record.id} onClick={() => navigate(`/tournaments/${record.id}`)}></EditButton>
-                    <DeleteButton hideText size="small" resource="tournaments" recordItemId={record.id} />
+                    <EditButton hideText size="small" resource="tournaments" icon={<EyeOutlined/>}
+                                recordItemId={record.id}
+                                onClick={() => navigate(`/tournaments/${record.id}`)}></EditButton>
+                    <EditButton hideText size="small" resource="tournaments" recordItemId={record.id}/>
+                    <DeleteButton hideText size="small" resource="tournaments" recordItemId={record.id}/>
                 </Space>
             ),
         },
     ];
 
     return (
-        <Layout className="h-screen" style={{ display: 'flex', flexDirection: 'row' }}>
-            <Layout style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
+        <Layout  className="h-screen" style={{display: 'flex', flexDirection: 'row'}}>
+            <Layout style={{flex: 1, backgroundColor: '#f0f2f5'}}>
+                <div className="sticky top-[7px] pr-6 z-10 flex justify-end">
+                    <CreateButton
+                        type="primary"
+                        className="antbutton bg-[#8D151F] hover:!bg-[#6e1018] text-white border-none duration-200 "
+                        style={{
+                            borderRadius: '4px'
+                        }}
+                        resource="tournaments"
+                        onClick={() => navigate('/tournaments/new')}
+                    >
+                        Create
+                    </CreateButton>
+                </div>
+                
                 <Content
                     style={{
-                        margin: '24px 16px',
+                        margin: '14px 14px',
                         padding: 24,
                         minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    <div style={{ marginBottom: 16 }} className='text-right'>
-                        <CreateButton
-                            className="antbutton bg-[#8D151F] hover:bg-[#6e1018] text-white border-none !hover:!bg-[#6e1018] !hover:!border-none"
-                        resource="tournaments"
-                            onClick={() => navigate('/tournaments/new')}
-                        />
-                    </div>
 
                     <Table
                         loading={isLoading}

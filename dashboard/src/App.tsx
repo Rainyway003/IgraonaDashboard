@@ -64,7 +64,7 @@ function App() {
                                 <Route path="/tournaments/:id">
                                     <Route index element={<ShowTeams/>}/>
                                     <Route path="new" element={<CreateTeam/>}/>
-                                    <Route path=":name/edit" element={<EditTeam/>}/>
+                                    <Route path="edit" element={<EditTeam/>}/>
                                 </Route>
                                 <Route path="/tournaments/:id/:name">
                                     <Route index element={<ShowPlayers/>}/>
