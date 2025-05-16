@@ -83,7 +83,7 @@ const ShowTeams: React.FC<ShowPlayersProps> = ({children}) => {
     return (
         <Layout className="h-screen" style={{display: 'flex', flexDirection: 'row', overflowX: "hidden"}}>
             <Layout style={{
-                height: expandedRowKeys.length === 1 ? '115.3vh' : '100vh',
+                height: expandedRowKeys.length === 1 ? '145vh' : '10vh',
                 background: '#f0f2f5'
             }}>
                 <div className='sticky top-[7px] pr-6 pl-6 z-10 flex justify-between'>

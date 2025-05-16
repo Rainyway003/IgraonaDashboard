@@ -1,6 +1,7 @@
 import React from "react";
 import StarIcon from "@mui/icons-material/Star";
 import {Form, Input} from "antd";
+import '../../../App.css'
 
 interface FormInputProps {
     className?: string;
@@ -36,16 +37,28 @@ const FormInput: React.FC<FormInputProps> = ({
     };
 
     return (
-        <Form.Item name={name} rules={[{required: required}]}>
-            <Input
-                className={`${className} bg-[#181818] w-[512px] text-white px-4 py-2 rounded focus:ring-2 focus:ring-[#8D151F]`}
-                variant="borderless"
-                size="large"
-                type={type}
-                placeholder={placeholder}
-                onChange={handleChange}
-            />
-        </Form.Item>
+        <div className="w-full">
+            <Form.Item
+                name={name}
+                rules={[{ required }]}
+                className="mb-0 russo"
+            >
+                <div className="bg-[#181818] rounded flex items-center w-full  focus-within:ring-2 focus-within:ring-[#8D151F]">
+                    <Input
+                        type={type}
+                        placeholder={placeholder}
+                        className="bg-[#181818] w-[512px] text-[#9CA3AF] placeholder:text-[#9CA3AF] px-4 py-3 rounded russo "
+                        variant="borderless"
+                        size="large"
+                    />
+                    {required && (
+                        <div className="pr-4  transition-colors">
+                            <StarIcon className="text-[#8D151F] h-5 w-5" />
+                        </div>
+                    )}
+                </div>
+            </Form.Item>
+        </div>
     );
 };
 

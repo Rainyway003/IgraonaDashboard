@@ -27,7 +27,6 @@ const EditTournament = () => {
         setChecked(!checked);
     };
 
-
     const {
         token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();

@@ -31,6 +31,8 @@ import ShowGames from "./dashboardApp/content/games/ShowGames";
 import CreateGame from "./dashboardApp/content/games/create/CreateGame";
 import ShowBanned from "./dashboardApp/content/banned/ShowBanned";
 import CreateBan from "./dashboardApp/content/banned/create/CreateBan";
+import Playstation from "./landingPage/rezerviranje/Playstation";
+import ShowReserve from "./dashboardApp/content/reserve/ShowReserve";
 
 function App() {
     return (
@@ -54,6 +56,7 @@ function App() {
                             <Route index element={<LandingApp/>}/>
                             <Route path="/t" element={<ShowTLanding/>}/>
                             <Route path="/t/:id" element={<SignUpScreen/>}/>
+                            <Route path="/rezerviraj" element={<Playstation/>}/>
                             <Route element={<Authenticated key="protected"
                                                            fallback={<Login></Login>}><AppLayout/></Authenticated>}>
                                 <Route path="/tournaments">
@@ -77,6 +80,9 @@ function App() {
                                 <Route path="/banned">
                                     <Route index element={<ShowBanned/>}/>
                                     <Route path={'new'} element={<CreateBan/>}/>
+                                </Route>
+                                <Route path="/plejke">
+                                    <Route index element={<ShowReserve/>}/>
                                 </Route>
                             </Route>
                         </Routes>

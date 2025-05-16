@@ -99,6 +99,18 @@ const dataProvider: DataProvider = {
                     ...variables,
                 } as TData,
             };
+        } else if (resource === "reserve") {
+            const docRef = await addDoc(
+                collection(db, resource),
+                variables as WithFieldValue<DocumentData>
+            );
+
+            return {
+                data: {
+                    id: docRef.id,
+                    ...variables,
+                } as TData,
+            };
         } else if (resource === "participants") {
             console.log(variables)
             const docRef = await addDoc(collection(db, "tournaments", variables.id, resource),
@@ -139,7 +151,7 @@ const dataProvider: DataProvider = {
     deleteOne: async <TData = any, TVariables = {}>(
         {resource, id, meta}: DeleteOneParams<TVariables>
     ): Promise<DeleteOneResponse<TData>> => {
-        if (resource === "tournaments" || resource === "games" || resource === "banned") {
+        if (resource === "tournaments" || resource === "games" || resource === "banned" || resource === "reserve") {
             const docRef = doc(db, resource, id as string);
             await deleteDoc(docRef);
 

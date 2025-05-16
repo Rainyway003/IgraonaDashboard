@@ -17,6 +17,7 @@
     "@refinedev/react-router": "^1.0.0",
     "@refinedev/simple-rest": "^5.0.1",
     "@tailwindcss/vite": "^4.1.4",
+    "@tanstack/react-query": "^5.76.1",
     "antd": "^5.17.0",
     "firebase": "^11.6.0",
     "react": "^18.0.0",

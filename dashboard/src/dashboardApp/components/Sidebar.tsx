@@ -26,6 +26,7 @@ const Sidebar = () => {
             '2': '/tournaments',
             '3': '/games',
             '4': '/banned',
+            '5': '/plejke',
         };
 
        navigate(routes[key], {replace: true});
@@ -37,6 +38,7 @@ const Sidebar = () => {
         if (currentPath.includes('/tournaments')) return '2';
         if (currentPath.includes('/games')) return '3';
         if (currentPath.includes('/banned')) return '4';
+        if (currentPath.includes('/plejke')) return '5';
         return '1';
     };
 
@@ -102,6 +104,12 @@ const Sidebar = () => {
                         icon: <DeleteOutlined />,
                         label: 'Banned',
                         onClick: () => handleNavigation('4')
+                    },
+                    {
+                        key: '5',
+                        icon: <DeleteOutlined />,
+                        label: 'Plejke',
+                        onClick: () => handleNavigation('5')
                     },
                 ]}
             />
