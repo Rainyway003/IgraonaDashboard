@@ -8,30 +8,35 @@ import FormInput from '../components/forms/FormInput';
 import {Form} from 'antd';
 import {useCreate, useOne} from '@refinedev/core';
 import '../../App.css'
+import CalendarComponent from '../components/Calendar'
 
 function Playstation() {
-    const {id} = useParams()
     const {mutate, isLoading: loading } = useCreate()
-
-    const onFinish = (values: { name: string }) => {
-        console.log(values)
-        mutate({
-                resource: 'reserve',
-                values: {
-                    name: values.name,
-                    number: values.number,
-                    startingAt: values.start,
-                    endingAt: values.finish,
-                    accepted: true,
-                },
-            }
-        )
-        setComplete(true)
-    }
 
     const [rules, setRules] = useState(false);
     const [error, setError] = useState(null);
     const [complete, setComplete] = useState(null);
+    const [dateRange, setDateRange] = useState<{ start: string; end: string } | null>(null);
+
+    const onFinish = (values: { name: string; number: string }) => {
+        if (!dateRange) {
+            setError('Molimo odaberite period rezervacije');
+            return;
+        }
+        setError(null);
+
+        mutate({
+            resource: 'reserve',
+            values: {
+                name: values.name,
+                number: values.number,
+                startingAt: new Date(dateRange.start),
+                endingAt: new Date(dateRange.end),
+                accepted: true,
+            },
+        });
+        setComplete(true);
+    };
 
     return (
         <>
@@ -47,13 +52,8 @@ function Playstation() {
                         <Form method="post" className='flex flex-col items-center w-[50%] gap-3' onFinish={onFinish} >
                             <FormInput placeholder={'Ime i Prezime'} name={'name'} type={'text'} required={true} />
                             <FormInput placeholder={'Kontakt'} name={'number'} type={'number'} required={true} />
-                            <div className='flex flex-col md:flex-row items-center justify-center gap-3'>
-                                <div className='flex flex-row gap-3'>
-                                    <FormInput placeholder={'Od kada'} name={'start'} type={'date'} required={true} />
-                                    <FormInput placeholder={'Do kada'} name={'finish'} type={'date'} required={true} />
-                                </div>
-                            </div>
-                            <button type="submit" className="button sm:!w-[300px] sm:!h-[75px] max-sm:!w-[200px] max-sm:!h-[50px] mt-8">
+                            <CalendarComponent onDateSelect={setDateRange} />
+                            <button type="submit" className="button right-80 bottom-40 sm:!w-[300px] sm:!h-[75px] max-sm:!w-[200px] max-sm:!h-[50px] mt-8">
                                 <div className="img-back !w-full !h-full"></div>
                                 <div className="text max-sm:!text-xs russo">PRIJAVI SE</div>
                             </button>
